@@ -1,0 +1,16 @@
+1. Expose Traefik LB by running this command in a separate terminal:
+minikube tunnel -c
+
+2. Get the Traefik LB IP by running this command:
+export LB_IP=$(kubectl get svc traefik -o jsonpath="{.spec.clusterIP}")
+echo $LB_IP
+
+3. Add the LB IP and the hostname to /etc/hosts:
+{{- range $host := .Values.hosts }}
+{{ $host.host }}
+{{- end }}
+
+4. curl this URL
+{{- range $host := .Values.hosts }}
+curl http://{{ $host.host }}{{ $host.path }}
+{{- end }}

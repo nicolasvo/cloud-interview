@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-ingressroute-world
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`ornikar.dev`) && PathPrefix(`/world`)
+    kind: Rule
+    services:
+    - name: world-service
+      port: 3000

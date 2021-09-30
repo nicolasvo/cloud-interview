@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-ingressroute-hello
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`ornikar.dev`) && PathPrefix(`/hello`)
+    kind: Rule
+    services:
+      - name: hello-service
+        port: 3000
+    middlewares:
+      - name: hello-stripprefix

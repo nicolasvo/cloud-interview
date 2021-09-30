@@ -1,0 +1,23 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "hello.fullname" . }}
+  labels:
+    {{- include "hello.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    {{- range .Values.hosts }}
+    - match: Host(`{{ .host }}`) && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "hello.fullname" $ }}
+          port: 3000
+      {{- if .middleware.enabled }}
+      middlewares:
+        {{- range $middleware := .middleware.middlewares }}
+        - name: {{ $middleware.name }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
